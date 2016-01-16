@@ -29,14 +29,9 @@
      haskell
      ;; html
      markdown
-<<<<<<< HEAD
      ocaml
-     ;;
-=======
      haskell
-     erc
      ;; org
->>>>>>> b26d91a9492ff626015544a9dd6e7467c447da55
      ;; python
      ;; (shell :variables
      ;;        shell-default-height 30
