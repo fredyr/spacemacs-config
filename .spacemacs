@@ -23,9 +23,14 @@
      emacs-lisp
      clojure
      erlang
+     elixir
+     elm
      git
+     haskell
+     ;; html
      markdown
-     ;; org
+     ocaml
+     ;;
      ;; python
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -162,7 +167,7 @@ before layers configuration."
 
   )
 
-(defun dotspacemacs/config ()
+(defun dotspacemacs/user-config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
@@ -186,6 +191,7 @@ layers configuration."
 
   ;; Eval using SPC SPC conflicts w Ace-jump
   (evil-leader/set-key-for-mode 'clojure-mode "<SPC>" 'cider-eval-last-sexp)
+  (evil-leader/set-key-for-mode 'tuareg-mode "," 'utop-eval-phrase)
   ;; Switch window close bindings
   ;; (evil-leader/set-key "wc" 'ace-delete-window)
   ;; (evil-leader/set-key "wC" 'delete-window)
@@ -200,7 +206,7 @@ layers configuration."
   (define-key evil-normal-state-map (kbd "_") 'sp-backward-up-sexp)
   (define-key evil-normal-state-map (kbd "+") 'sp-down-sexp)
   ;;(define-key global-map (kbd "C-k") 'sp-kill-sexp)
-  ;; Colors
+  ;; Colors -  Adjustments to Wombat
   (set-cursor-color "yellow")
   (set-face-background 'region "royalblue4") ;; Selections
   (custom-set-faces
