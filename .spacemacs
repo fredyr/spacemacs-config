@@ -29,8 +29,14 @@
      haskell
      ;; html
      markdown
+<<<<<<< HEAD
      ocaml
      ;;
+=======
+     haskell
+     erc
+     ;; org
+>>>>>>> b26d91a9492ff626015544a9dd6e7467c447da55
      ;; python
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -88,7 +94,7 @@ before layers configuration."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("DejaVu Sans Mono"
-                               :size 17
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -157,7 +163,7 @@ before layers configuration."
    dotspacemacs-persistent-server nil
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
-   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("ag" "ack" "grep" "pt")
    ;; The default package repository used if no explicit repository has been
    ;; specified with an installed package.
    ;; Not used for now.
@@ -171,6 +177,14 @@ before layers configuration."
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+
+  (defun append-semicolon ()
+    (interactive)
+    (evil-end-of-line)
+    (evil-append nil)
+    (insert ";")
+    (evil-normal-state))
+
   (global-hl-line-mode -1) ; Disable current line highlight
   (global-vi-tilde-fringe-mode -1)
   ;; Keybindings
@@ -181,13 +195,15 @@ layers configuration."
   (global-set-key [end] 'evil-end-of-line)
   (windmove-default-keybindings)
   (evil-leader/set-key "cf" 'clang-format-region)
+  (global-set-key (kbd "C-;") 'append-semicolon)
+  (evil-leader/set-key "ps" 'helm-projectile-find-other-file)
 
   ;; (setq flycheck-clang-include-path
   ;;       (list
   ;;        (expand-file-name "~/Documents/projects/..")
   ;;        ))
   (setq flycheck-clang-includes (list "stdbool.h"))
-  (setq flycheck-clang-language-standard (list "c99"))
+  ;; (setq flycheck-clang-language-standard (list "c99"))
 
   ;; Eval using SPC SPC conflicts w Ace-jump
   (evil-leader/set-key-for-mode 'clojure-mode "<SPC>" 'cider-eval-last-sexp)
@@ -241,11 +257,22 @@ layers configuration."
   (global-auto-revert-mode t)
   ;; Use C style comments in C
   (add-hook 'c-mode-common-hook (lambda () (setq comment-start "// " comment-end "")))
+  ;; Let underscore be a part of words in C mode YES!
+  (add-hook 'c-mode-common-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+
   ;; Magit SVN
   (setq-default git-enable-magit-svn-plugin t)
   ;; Org-mode show embedded code in colors!
   (setq org-src-fontify-natively t)
-
+  ;; Asm mode configuration
+  (require 'asm-mode)
+  (add-hook 'asm-mode-hook (lambda ()
+                             (setq indent-tabs-mode nil) ; use spaces to indent
+                             (electric-indent-mode -1) ; indentation in asm-mode is annoying
+                             (setq asm-comment-char ?\/)
+                             (setq tab-stop-list (number-sequence 2 60 2))))
+  ;; ERC config
+  (setq erc-hide-list '("JOIN" "PART" "QUIT"))
   (defun dos2unix ()
     "Replace DOS eol CR LF with Unix eol CR"
     (interactive)
