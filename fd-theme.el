@@ -34,6 +34,11 @@
 
       (fd-background       "#242424")
       (fd-highlight        "#454545")
+      (fd-red              "#e5786d")
+      (fd-blue             "#8ac6f2")
+      (fd-green            "#95e454")
+      (fd-light-yellow     "#ffa")
+      (fd-yellow           "#ff5")
 
       (smyck-dark-black    "#000000")
       (smyck-dark-red      "#C75646")
@@ -69,34 +74,51 @@
    `(mode-line ((,class (:background "#444444" :foreground "#f6f3e8"))))
    `(mode-line-inactive ((,class (:background "#444444" :foreground "#857b6f"))))
    ;; Escape and prompt faces
-   `(minibuffer-prompt ((,class (:foreground "#e5786d"))))
+   `(minibuffer-prompt ((,class (:foreground ,fd-red))))
    `(escape-glyph ((,class (:foreground "#ddaa6f" :weight bold))))
    ;; Font lock faces
-   `(font-lock-builtin-face ((,class (:foreground "#e5786d"))))
+
+
+   ;; '(face ((((class color) (min-colors 89)) (:foreground "SkyBlue1"))))
+   ;; '(font-lock-builtin-face ((((class color) (min-colors 89)) (:foreground "#ffa"))))
+   ;; '(font-lock-function-name-face ((((class color) (min-colors 89)) (:foreground "#ff5"))))
+   ;; ;;'(font-lock-comment-face ((t (:foreground "#fff"))))
+
+   ;; '(font-lock-keyword-face ((((class color) (min-colors 89)) (:foreground "SkyBlue1"))))
+   ;; '(font-lock-type-face ((((class color) (min-colors 89)) (:foreground "#e0e0e0"))))
+   ;; '(font-lock-variable-name-face ((((class color) (min-colors 89)) (:foreground "#ffa"))))
+
+
+   `(font-lock-builtin-face ((,class (:foreground ,fd-light-yellow))))
+   `(font-lock-function-name-face ((,class (:foreground ,fd-yellow))))
    `(font-lock-comment-face ((,class (:foreground "#99968b"))))
-   `(font-lock-constant-face ((,class (:foreground "#e5786d"))))
-   `(font-lock-function-name-face ((,class (:foreground "#cae682"))))
-   `(font-lock-keyword-face ((,class (:foreground "#8ac6f2" :weight bold))))
-   `(font-lock-string-face ((,class (:foreground "#95e454"))))
-   `(font-lock-type-face ((,class (:foreground "#92a65e" :weight bold))))
-   `(font-lock-variable-name-face ((,class (:foreground "#cae682"))))
+   `(font-lock-constant-face ((,class (:foreground ,fd-red))))
+   `(font-lock-keyword-face ((,class (:foreground ,fd-blue :weight bold))))
+   `(font-lock-string-face ((,class (:foreground ,fd-green))))
+   `(font-lock-type-face ((,class (:foreground "#e0e0e0"))))
+   `(font-lock-variable-name-face ((,class (:foreground ,fd-light-yellow))))
    `(font-lock-warning-face ((,class (:foreground "#ccaa8f"))))
    ;; Button and link faces
-   `(link ((,class (:foreground "#8ac6f2" :underline t))))
-   `(link-visited ((,class (:foreground "#e5786d" :underline t))))
+   `(link ((,class (:foreground ,fd-blue :underline t))))
+   `(link-visited ((,class (:foreground ,fd-red :underline t))))
    `(button ((,class (:background "#333333" :foreground "#f6f3e8"))))
    `(header-line ((,class (:background "#303030" :foreground "#e7f6da"))))
 
+   `(web-mode-html-tag-face ((t (:foreground "skyblue1"))))
    ;; Javascript
-   `(js2-function-param ((,class (:foreground "#fce94f")))) ;;; "#fce94f"
+   `(js2-function-param ((,class (:foreground "#fce94f"))))
    ;; Magit
    `(magit-diff-removed ((t (:foreground ,smyck-dark-red))))
    `(magit-diff-added ((t (:foreground ,smyck-dark-green))))
    `(magit-diff-removed-highlight ((t (:foreground ,smyck-dark-red :background "#454545"))))
    `(magit-diff-added-highlight ((t (:foreground ,smyck-dark-green :background "#454545"))))
 
+   ;;;`(sp-show-pair-match-face ((t (:foreground "#def" :background ,default :weight ,extra-bold))))
+   ;; (set-face-background 'sp-show-pair-match-face (face-background 'default))
+   ;; (set-face-foreground 'sp-show-pair-match-face "#def")
+   ;; (set-face-attribute 'sp-show-pair-match-face nil :weight 'extra-bold)
 
-;; ediff
+   ;; ediff
    `(ediff-fine-diff-A ((t (:background ,monokai-orange-lc))))
    `(ediff-fine-diff-B ((t (:background ,monokai-green-lc))))
    `(ediff-fine-diff-C ((t (:background ,monokai-yellow-lc))))
@@ -133,13 +155,13 @@
    `(gnus-header-name ((,class (:foreground "#8ac6f2"))))
    `(gnus-header-newsgroups ((,class (:foreground "#cae682"))))
    ;; Message faces
-   `(message-header-name ((,class (:foreground "#8ac6f2" :weight bold))))
-   `(message-header-cc ((,class (:foreground "#95e454"))))
-   `(message-header-other ((,class (:foreground "#95e454"))))
+   `(message-header-name ((,class (:foreground ,fd-blue :weight bold))))
+   `(message-header-cc ((,class (:foreground ,fd-green))))
+   `(message-header-other ((,class (:foreground ,fd-green))))
    `(message-header-subject ((,class (:foreground "#cae682"))))
    `(message-header-to ((,class (:foreground "#cae682"))))
    `(message-cited-text ((,class (:foreground "#99968b"))))
-   `(message-separator ((,class (:foreground "#e5786d" :weight bold))))))
+   `(message-separator ((,class (:foreground ,fd-red :weight bold))))))
 
 (custom-theme-set-variables
  'fd

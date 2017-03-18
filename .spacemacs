@@ -183,9 +183,6 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
-
-  ;; (spacemacs/load-theme 'fd)
-
   (defun append-semicolon ()
     (interactive)
     (evil-end-of-line)
@@ -235,27 +232,6 @@ layers configuration."
   (define-key evil-normal-state-map (kbd "+") 'sp-down-sexp)
   ;;(define-key global-map (kbd "C-k") 'sp-kill-sexp)
 
-  ;; Colors -  Adjustments to Wombat
-  ;; (set-cursor-color "yellow")
-  ;; (set-face-background 'region "royalblue4") ;; Selections
-
-  ;; (add-hook 'js2-mode-hook
-  ;;           (lambda()
-  ;;             (set-face-foreground 'js2-function-param "#fce94f") ;; JS function args
-  ;;             ;; (set-face-foreground 'js2-function-call "#fce94f") ;; JS function args
-  ;;             ))
-  (add-hook 'web-mode-hook
-            (lambda()
-              (set-face-foreground 'web-mode-html-tag-face "skyblue1")
-              ))
-  (custom-set-faces
-   '(face ((((class color) (min-colors 89)) (:foreground "SkyBlue1"))))
-   '(font-lock-builtin-face ((((class color) (min-colors 89)) (:foreground "#ffa"))))
-   ;;'(font-lock-comment-face ((t (:foreground "#fff"))))
-   '(font-lock-function-name-face ((((class color) (min-colors 89)) (:foreground "#ff5"))))
-   '(font-lock-keyword-face ((((class color) (min-colors 89)) (:foreground "SkyBlue1"))))
-   '(font-lock-type-face ((((class color) (min-colors 89)) (:foreground "#e0e0e0"))))
-   '(font-lock-variable-name-face ((((class color) (min-colors 89)) (:foreground "#ffa")))))
   ;; Helm-mini styling
   (require 'helm-imenu)
   (setq helm-display-header-line nil) ;; t by default
@@ -342,7 +318,6 @@ layers configuration."
   ;; (flycheck-add-mode 'javascript-eslint 'web-mode)
   ;; (setq flycheck-highlighting-mode 'lines)
 
-
   ;; ERC config
   (setq erc-hide-list '("JOIN" "PART" "QUIT"))
   (defun dos2unix ()
@@ -375,14 +350,3 @@ layers configuration."
            (ansible::auto-decrypt-encrypt))
      (elixir-enable-compilation-checking . t)
      (elixir-enable-compilation-checking)))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(face ((((class color) (min-colors 89)) (:foreground "SkyBlue1"))))
- '(font-lock-builtin-face ((((class color) (min-colors 89)) (:foreground "#ffa"))))
- '(font-lock-function-name-face ((((class color) (min-colors 89)) (:foreground "#ff5"))))
- '(font-lock-keyword-face ((((class color) (min-colors 89)) (:foreground "SkyBlue1"))))
- '(font-lock-type-face ((((class color) (min-colors 89)) (:foreground "#e0e0e0"))))
- '(font-lock-variable-name-face ((((class color) (min-colors 89)) (:foreground "#ffa")))))
