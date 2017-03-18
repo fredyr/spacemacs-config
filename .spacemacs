@@ -3,7 +3,9 @@
 ;; It must be stored in your home directory.
 
 (defun dotspacemacs/layers ()
-  "Configuration Layers declaration."
+  "Configuration Layers declaration.
+You should not put any user code in this function besides modifying the variable
+values."
   (setq-default
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
@@ -12,6 +14,11 @@
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     ansible
+     yaml
+     html
+     javascript
+     (python :variables python-sort-imports-on-save t)
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -28,9 +35,11 @@
      git
      haskell
      ;; html
+     ;; react
      markdown
      ocaml
      haskell
+     idris
      ;; org
      ;; python
      ;; (shell :variables
@@ -43,9 +52,9 @@
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(gnuplot-mode)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(org-bullets)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'
@@ -76,7 +85,8 @@ before layers configuration."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(wombat
+   dotspacemacs-themes '(fd
+                         wombat
                          solarized-light
                          solarized-dark
                          spacemacs-light
@@ -89,7 +99,7 @@ before layers configuration."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("DejaVu Sans Mono"
-                               :size 18
+                               :size 15
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -165,13 +175,16 @@ before layers configuration."
    dotspacemacs-default-package-repository nil
    )
   ;; User initialization goes here
-
+  (setq-default custom-theme-directory "~/.emacs.d/private/local/")
   )
 
 (defun dotspacemacs/user-config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+
+
+  ;; (spacemacs/load-theme 'fd)
 
   (defun append-semicolon ()
     (interactive)
@@ -200,7 +213,10 @@ layers configuration."
   (setq flycheck-clang-includes (list "stdbool.h"))
   ;; (setq flycheck-clang-language-standard (list "c99"))
 
+  (setq scheme-program-name "scheme48 -i /Users/fredyr/Documents/projects/prescheme/ps-compiler.image")
+
   ;; Eval using SPC SPC conflicts w Ace-jump
+  (evil-leader/set-key-for-mode 'scheme-mode "," 'scheme-send-last-sexp)
   (evil-leader/set-key-for-mode 'clojure-mode "<SPC>" 'cider-eval-last-sexp)
   (evil-leader/set-key-for-mode 'tuareg-mode "," 'utop-eval-phrase)
   ;; Switch window close bindings
@@ -212,14 +228,26 @@ layers configuration."
   (setq sp-highlight-pair-overlay nil)
   (setq sp-highlight-wrap-overlay nil)
   (setq sp-highlight-wrap-tag-overlay nil)
+  ;; (setq sp-show-pair-match-face nil)
   (define-key evil-normal-state-map (kbd "-") 'sp-backward-sexp)
   (define-key evil-normal-state-map (kbd "=") 'sp-next-sexp)
   (define-key evil-normal-state-map (kbd "_") 'sp-backward-up-sexp)
   (define-key evil-normal-state-map (kbd "+") 'sp-down-sexp)
   ;;(define-key global-map (kbd "C-k") 'sp-kill-sexp)
+
   ;; Colors -  Adjustments to Wombat
-  (set-cursor-color "yellow")
-  (set-face-background 'region "royalblue4") ;; Selections
+  ;; (set-cursor-color "yellow")
+  ;; (set-face-background 'region "royalblue4") ;; Selections
+
+  ;; (add-hook 'js2-mode-hook
+  ;;           (lambda()
+  ;;             (set-face-foreground 'js2-function-param "#fce94f") ;; JS function args
+  ;;             ;; (set-face-foreground 'js2-function-call "#fce94f") ;; JS function args
+  ;;             ))
+  (add-hook 'web-mode-hook
+            (lambda()
+              (set-face-foreground 'web-mode-html-tag-face "skyblue1")
+              ))
   (custom-set-faces
    '(face ((((class color) (min-colors 89)) (:foreground "SkyBlue1"))))
    '(font-lock-builtin-face ((((class color) (min-colors 89)) (:foreground "#ffa"))))
@@ -254,11 +282,17 @@ layers configuration."
   (add-hook 'c-mode-common-hook (lambda () (setq comment-start "// " comment-end "")))
   ;; Let underscore be a part of words in C mode YES!
   (add-hook 'c-mode-common-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+  (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+  (add-hook 'js2-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
   ;; Magit SVN
   (setq-default git-enable-magit-svn-plugin t)
+  (setq-default git-magit-status-fullscreen t)
   ;; Org-mode show embedded code in colors!
   (setq org-src-fontify-natively t)
+  (setq org-bullets-mode nil)
+  ;; (org-babel-do-load-languages 'org-babel-load-languages '((ditaa . t) (gnuplot . t))
+
   ;; Asm mode configuration
   (require 'asm-mode)
   (add-hook 'asm-mode-hook (lambda ()
@@ -266,6 +300,49 @@ layers configuration."
                              (electric-indent-mode -1) ; indentation in asm-mode is annoying
                              (setq asm-comment-char ?\/)
                              (setq tab-stop-list (number-sequence 2 60 2))))
+  ;; Reason mode configuration
+  ;; (setq opam (substring (shell-command-to-string "opam config var prefix 2> /dev/null") 0 -1))
+  ;; (add-to-list 'load-path (concat opam "/share/emacs/site-lisp"))
+  ;; (setq refmt-command (concat opam "/bin/refmt"))
+  ;; (require 'reason-mode)
+  ;; (require 'merlin)
+  ;; (setq merlin-ac-setup t)
+  ;; (add-hook 'reason-mode-hook (lambda ()
+  ;;                               (add-hook 'before-save-hook 'refmt-before-save)
+  ;;                               (merlin-mode)))
+
+  ;; JS2 config
+  (setq js2-mode-show-strict-warnings nil)
+  ;; Web-mode config
+  (setq web-mode-enable-current-element-highlight nil)
+
+  (defun my/use-eslint-from-node-modules ()
+    (let* ((root (locate-dominating-file
+                  (or (buffer-file-name) default-directory)
+                  "node_modules"))
+           (eslint (and root
+                        (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                          root))))
+      (when (and eslint (file-executable-p eslint))
+        (setq-local flycheck-javascript-eslint-executable eslint))))
+
+  (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+  ;; use web-mode for .jsx files
+  ;; (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+  ;; http://www.flycheck.org/manual/latest/index.html
+  (require 'flycheck)
+  ;; turn on flychecking globally
+  ;; (add-hook 'after-init-hook #'global-flycheck-mode)
+  ;; disable jshint since we prefer eslint checking
+  (setq-default flycheck-disabled-checkers
+                (append flycheck-disabled-checkers
+                        '(javascript-jshint)))
+
+  ;; use eslint with web-mode for jsx files
+  ;; (flycheck-add-mode 'javascript-eslint 'web-mode)
+  ;; (setq flycheck-highlighting-mode 'lines)
+
+
   ;; ERC config
   (setq erc-hide-list '("JOIN" "PART" "QUIT"))
   (defun dos2unix ()
@@ -277,3 +354,35 @@ layers configuration."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+ '(safe-local-variable-values
+   (quote
+    ((eval web-mode-set-engine "django")
+     (eval when
+           (fboundp
+            (quote ansible))
+           (ansible)
+           (setq-local ansible::vault-password-file
+                       (expand-file-name "vaultpass"
+                                         (projectile-project-root)))
+           (ansible::auto-decrypt-encrypt))
+     (elixir-enable-compilation-checking . t)
+     (elixir-enable-compilation-checking)))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(face ((((class color) (min-colors 89)) (:foreground "SkyBlue1"))))
+ '(font-lock-builtin-face ((((class color) (min-colors 89)) (:foreground "#ffa"))))
+ '(font-lock-function-name-face ((((class color) (min-colors 89)) (:foreground "#ff5"))))
+ '(font-lock-keyword-face ((((class color) (min-colors 89)) (:foreground "SkyBlue1"))))
+ '(font-lock-type-face ((((class color) (min-colors 89)) (:foreground "#e0e0e0"))))
+ '(font-lock-variable-name-face ((((class color) (min-colors 89)) (:foreground "#ffa")))))
